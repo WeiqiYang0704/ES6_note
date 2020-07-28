@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+
+    </div>
+    <script>
+        const  obj={
+            a:1,
+            b:2
+        }
+        function  observable(obj){
+         //   const obj2={};
+            let mydiv=document.getElementsByTagName("div")[0];
+            // for (const key in obj) {
+            //     if (obj.hasOwnProperty(key)) {
+            //         let  item = obj[key];
+            //         Object.defineProperty(obj2,key,{
+            //             get (){
+            //                 return item
+            //             },
+            //             set (val ){
+            //                 console.log("====set")
+            //                 item=val;
+
+            //                 render();
+                        
+            //                // return  item
+            //             },
+            //             enumerable:true
+            //         })
+            //     }
+            // }
+            //这里会 代理一个对象， set方法 对象的属性变化时,调用底层的set 对属性赋值。
+            const proxy=new Proxy(obj,{
+                set (target,props,value){
+                    Reflect.set(target,props,value)
+                    render(target);
+                }
+            })
+            render(obj);
+         //   console.log(mydiv.innerText)
+            function render(obj2){
+                mydiv.innerHTML="";
+                for (const key in obj2) {
+                    if (obj2.hasOwnProperty(key)) {
+                        let  element = obj2[key];
+                        mydiv.innerHTML+=`
+                     <p> ${key}: ${element}   </p>
+                  `
+                    }
+                }
+               
+            }
+            return proxy
+            
+        }
+      const objByDefine=  observable(obj)
+    </script>
+</body>
+</html>
